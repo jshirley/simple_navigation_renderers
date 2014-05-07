@@ -23,7 +23,7 @@ module SimpleNavigationRenderers
 
       def container_class( level )
         if level == 1
-          "nav" + ((options[:bv] == 3) ? ' navbar-nav' : '')
+          "nav" + ((options[:bv] == 3) ? ' ' + options[:container_class] : '')
         else
           "dropdown-menu"
         end
@@ -34,6 +34,7 @@ module SimpleNavigationRenderers
         config_selected_class = sn_config.selected_class
         config_name_generator = sn_config.name_generator
         sn_config.selected_class = "active"
+
         # name_generator should be proc (not lambda or method) to be compatible with earlier versions of simple-navigation
         sn_config.name_generator = proc do | name, item |
           config_name_generator.call( prepare_name(name), item )
@@ -75,7 +76,15 @@ module SimpleNavigationRenderers
     include SimpleNavigationRenderers::Bootstrap
 
     def initialize( options )
-      super( options.merge!({bv: 3}) ) # add bootstrap version option
+      super( options.merge!({bv: 3, container_class: 'navbar-nav'}) ) # add bootstrap version option
+    end
+  end
+
+  class BootstrapTabs < SimpleNavigation::Renderer::Base
+    include SimpleNavigationRenderers::Bootstrap
+
+    def initialize( options )
+      super( options.merge!({bv: 3, container_class: 'nav-tabs'}) ) # add bootstrap version option
     end
   end
 
